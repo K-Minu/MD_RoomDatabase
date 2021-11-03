@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         // ViewModel Test... 안됌 .. 11/1일
         // 11/3일 드디어 해결..
         MainViewModel vModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainViewModel.class);
+        
         vModel.test(this);
 
 
