@@ -27,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mResultTextView;
     private BackPressedForFinish backPressedForFinish;
 
-//    private String filePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"sampledata/trash.txt";
-//    private InputStream in = getResources().openRawResource(R.raw.trash);
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,31 +38,24 @@ public class MainActivity extends AppCompatActivity {
         mTodoEditText = findViewById(R.id.textedit);
         mResultTextView = findViewById(R.id.result_text);
 
-        // ViewModel Test... 안됌 .. 11/1일
+        // ViewModel Test... 11/1일
         // 11/3일 드디어 해결..
         MainViewModel vModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainViewModel.class);
-        
+
         vModel.test(this);
-
-
-        //디비생성
-//        MDDatabase db = MDDatabase.getAppDatabase(this);
 
         //UI 갱신 (라이브데이터 Observer 이용, 해당 디비값이 변화가생기면 실행됨)
         vModel.getAll().observe(this, todos -> mResultTextView.setText(todos.toString()));
-//        db.todoDao().getAll().observe(this, todos -> mResultTextView.setText(todos.toString()));
 
         //DB 데이터 불러오기 (SELECT)
         mResultTextView.setText(vModel.getAll().toString());
-//        mResultTextView.setText(db.todoDao().getAll().toString());
 
         //추가버튼시 DB에 데이터 INSERT
         findViewById(R.id.add_button).setOnClickListener(view -> {
             if(mTodoEditText.getText().toString().trim().length() <= 0) {
                 Toast.makeText(MainActivity.this, "한글자 이상입력해주세요.", Toast.LENGTH_SHORT).show();
-            }else{
-                    vModel.insert(new Todo(mTodoEditText.getText().toString()));
-//                new InsertAsyncTask(db.todoDao()).execute(new Todo(mTodoEditText.getText().toString()));
+            }else {
+                vModel.insert(new Todo(mTodoEditText.getText().toString()));
                 mTodoEditText.setText("");
             }
         });
