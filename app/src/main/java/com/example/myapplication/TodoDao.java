@@ -20,6 +20,9 @@ public interface TodoDao {
     @Update
     void update(Todo todo);
 
+    @Query("SELECT * FROM Todo WHERE id = :mId")
+    Todo getData(int mId);
+
     @Delete
     void delete(Todo todo);
 

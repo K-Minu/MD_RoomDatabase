@@ -34,12 +34,27 @@
 
     <TextView
         android:id="@+id/result_text"
-        android:layout_width="382dp"
-        android:layout_height="594dp"
+        android:layout_width="398dp"
+        android:layout_height="356dp"
+        android:layout_marginBottom="200dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textedit" />
+        app:layout_constraintTop_toBottomOf="@+id/add_button" />
+
+    <Button
+        android:id="@+id/del_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="284dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="171dp"
+        android:text="Delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/result_text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
