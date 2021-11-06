@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.os.Message;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView mResultTextView;
     private BackPressedForFinish backPressedForFinish;
     private MainViewModel vModel = null;
-    private static int num = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +59,14 @@ public class MainActivity extends AppCompatActivity {
         mResultTextView.setText(vModel.getAll().toString());
 
         //추가버튼시 DB에 데이터 INSERT
-        findViewById(R.id.add_button).setOnClickListener(view -> {
-            if (mTodoEditText.getText().toString().trim().length() <= 0) {
-                Toast.makeText(MainActivity.this, "한글자 이상입력해주세요.", Toast.LENGTH_SHORT).show();
-            } else {
-                vModel.insert(new Todo(mTodoEditText.getText().toString()));
-                mTodoEditText.setText("");
-            }
-        });
+//        findViewById(R.id.add_button).setOnClickListener(view -> {
+//            if (mTodoEditText.getText().toString().trim().length() <= 0) {
+//                Toast.makeText(MainActivity.this, "한글자 이상입력해주세요.", Toast.LENGTH_SHORT).show();
+//            } else {
+//                vModel.insert(new KTodo(mTodoEditText.getText().toString()));
+//                mTodoEditText.setText("");
+//            }
+//        });
 
         // Data Delete All
         findViewById(R.id.del_button).setOnClickListener(new View.OnClickListener() {
@@ -98,13 +99,18 @@ public class MainActivity extends AppCompatActivity {
             InputStream is = getResources().openRawResource(R.raw.trash);
             InputStreamReader inputreader = new InputStreamReader(is);
             BufferedReader reader = new BufferedReader(inputreader);
+
+            StringTokenizer st;
+            String[] arry_Massage;
+
             String line;
             while((line = reader.readLine()) != null){
-                vModel.insert(new Todo(line));
+                st = new StringTokenizer(line,":");
+//                arry_Massage = new String[st.countTokens()];
+                vModel.insert(new KTodo(st.nextToken(), st.nextToken()));
                 strBuffer.append(line+"\n");
             }
 //            Toast.makeText(this,"성공적으로 읽음",Toast.LENGTH_SHORT).show();
-            num ++;
             reader.close();
             is.close();
         }catch (IOException e){
