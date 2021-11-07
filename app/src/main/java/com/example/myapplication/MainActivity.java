@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import android.os.Message;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +30,6 @@ import java.util.StringTokenizer;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText mTodoEditText;
     private TextView mResultTextView;
     private BackPressedForFinish backPressedForFinish;
     private MainViewModel vModel = null;
@@ -42,53 +42,37 @@ public class MainActivity extends AppCompatActivity {
         // BackPressedForFinish 객체 생성
         backPressedForFinish = new BackPressedForFinish(this);
 
-        mTodoEditText = findViewById(R.id.textedit);
         mResultTextView = findViewById(R.id.result_text);
-
-
+        
         // ViewModel Test... 11/1일
         // 11/3일 드디어 해결..
         vModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MainViewModel.class);
 
-        vModel.test(this);
+//        vModel.test(this);
 
         //UI 갱신 (라이브데이터 Observer 이용, 해당 디비값이 변화가생기면 실행됨)
-        vModel.getAll().observe(this, todos -> mResultTextView.setText(todos.toString()));
-
-        //DB 데이터 불러오기 (SELECT)
-        mResultTextView.setText(vModel.getAll().toString());
-
-        //추가버튼시 DB에 데이터 INSERT
-//        findViewById(R.id.add_button).setOnClickListener(view -> {
-//            if (mTodoEditText.getText().toString().trim().length() <= 0) {
-//                Toast.makeText(MainActivity.this, "한글자 이상입력해주세요.", Toast.LENGTH_SHORT).show();
-//            } else {
-//                vModel.insert(new KTodo(mTodoEditText.getText().toString()));
-//                mTodoEditText.setText("");
-//            }
-//        });
-
-        // Data Delete All
-        findViewById(R.id.del_button).setOnClickListener(new View.OnClickListener() {
+        vModel.getAll().observe(this, new Observer<List<KTodo>>() {
             @Override
-            public void onClick(View v) {
-                vModel.delete(6);
+            public void onChanged(List<KTodo> ktodos) {
+                mResultTextView.setText(ktodos.toString());
             }
         });
 
+        //DB 데이터 불러오기 (SELECT)
+        mResultTextView.setText(vModel.getAll().toString());
 
         // txt File에 있는 내용을 Database에 입력 최초 1회만 실행 되도록...
         SharedPreferences pref = getSharedPreferences("isFirst", Activity.MODE_PRIVATE);
         boolean first = pref.getBoolean("isFirst", false);
         if(first==false){
-//            Log.d("Is first Time?", "first");
+            Log.d("Is first Time?", "first");
             SharedPreferences.Editor editor = pref.edit();
             editor.putBoolean("isFirst",true);
             editor.commit();
             //앱 최초 실행시 하고 싶은 작업
             ReadTextFile();
         }else{
-//            Log.d("Is first Time?", "not first");
+            Log.d("Is first Time?", "not first");
         }
     }
 
@@ -101,16 +85,15 @@ public class MainActivity extends AppCompatActivity {
             BufferedReader reader = new BufferedReader(inputreader);
 
             StringTokenizer st;
-            String[] arry_Massage;
 
             String line;
             while((line = reader.readLine()) != null){
                 st = new StringTokenizer(line,":");
-//                arry_Massage = new String[st.countTokens()];
-                vModel.insert(new KTodo(st.nextToken(), st.nextToken()));
+                String st1 = st.nextToken();
+                String st2 = st.nextToken();
+                vModel.insert(new KTodo(st2,st1));
                 strBuffer.append(line+"\n");
             }
-//            Toast.makeText(this,"성공적으로 읽음",Toast.LENGTH_SHORT).show();
             reader.close();
             is.close();
         }catch (IOException e){

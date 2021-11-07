@@ -1,12 +1,15 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class KTodo {
     @PrimaryKey
+    @NonNull
     private String name;
+
     private String kind;
 
     public KTodo(String name, String kind){
@@ -32,6 +35,6 @@ public class KTodo {
 
     @Override
     public String toString(){
-        return "\n kind =>" + this.kind + ", name = " + this.name;
+        return " kind = " + this.kind + ", name = " + this.name;
     }
 }

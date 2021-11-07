@@ -16,7 +16,7 @@ public abstract class KDatabase extends RoomDatabase {
     // 디비 객체생성
     public static KDatabase getAppDatabase(Context context) {
         if(INSTANCE == null){
-            INSTANCE = Room.databaseBuilder(context, KDatabase.class, "ktodo-db").build();
+            INSTANCE = Room.databaseBuilder(context, KDatabase.class, "todo-db-02").build();
         }
         return INSTANCE;
     }

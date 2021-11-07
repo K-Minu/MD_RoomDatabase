@@ -23,33 +23,22 @@ public class MainViewModel extends AndroidViewModel {
     public MainViewModel(@NonNull Application application) {
         super(application);
 
-//        db = MDDatabase.getAppDatabase(application);
         db = KDatabase.getAppDatabase(application);
     }
 
-    public void test(Context context){
-        Toast.makeText(context,"View모델까진 들와짐",Toast.LENGTH_SHORT).show();
-    }
-
-//    public LiveData<List<Todo>> getAll(){
-//        return db.todoDao().getAll();
-//    }
     public LiveData<List<KTodo>> getAll(){
         return db.ktodoDao().getAll();
     }
 
     public void insert(KTodo ktodo){
-//        new InsertAsyncTask(db.todoDao()).execute(todo);
-
-        new DaoAsyncTask(db.ktodoDao(),INSERT, ktodo.getName(),ktodo.getKind() ).execute(ktodo);
+        new DaoAsyncTask(db.ktodoDao(),INSERT, ktodo.getName(),ktodo.getKind()).execute(ktodo);
     }
 
     public void delete(int ss) {
-        new DaoAsyncTask(db.ktodoDao(),DELETE, "ss", "").execute();
+        new DaoAsyncTask(db.ktodoDao(),DELETE, "", "").execute();
     }
 
-    public void Destroydb(){
-       db.destroyInstance();}
+    public void Destroydb(){db.destroyInstance();}
 
 
     private static class DaoAsyncTask extends AsyncTask<KTodo,Void,Void> {
@@ -78,7 +67,7 @@ public class MainViewModel extends AndroidViewModel {
             }
             else if(mType.equals("DELETE")){
                 if(mTodoDao.getData(mName) != null) {
-//                    mTodoDao.delete(mTodoDao.getData(mName));
+                    mTodoDao.delete(mTodoDao.getData(mName));
                 }
             }
             else if(mType.equals("CLEAR")){
@@ -86,25 +75,5 @@ public class MainViewModel extends AndroidViewModel {
             }
             return null;
         }
-
     }
-
-    //메인스레드에서 데이터베이스에 접근할 수 없으므로 AsyncTask를 사용하도록 한다.
-//    private static class InsertAsyncTask extends AsyncTask<Todo, Void, Void> {
-//        private TodoDao mTodoDao;
-//
-//        public  InsertAsyncTask(TodoDao todoDao){
-//            this.mTodoDao = todoDao;
-//        }
-//
-//        @Override //백그라운드작업(메인스레드 X)
-//        protected Void doInBackground(Todo... todos) {
-//            //추가만하고 따로 SELECT문을 안해도 라이브데이터로 인해
-//            //getAll()이 반응해서 데이터를 갱신해서 보여줄 것이다,  메인액티비티에 옵저버에 쓴 코드가 실행된다. (라이브데이터는 스스로 백그라운드로 처리해준다.)
-//            mTodoDao.insert(todos[0]);
-//            return null;
-//        }
-//    }
-
-
 }
